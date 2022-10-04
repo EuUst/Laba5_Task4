@@ -23,7 +23,6 @@
                 }
                 Console.WriteLine("Work is finished.");
             }
-
             else
             {
                 Console.WriteLine("Your input is invalid, try again later.");
