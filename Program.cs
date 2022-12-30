@@ -6,91 +6,78 @@
         {
             string input = Console.ReadLine();
 
-            if (IsStringCorrect(input))
+            if (IsStringValid(input))
             {
-                var array = ParseToArray(input);
-                var changedArray = GetChangedArray(array);
+                var array = ToArray(input);
+                var changedArray = ChangeArray(array);
 
                 foreach(var item in changedArray)
-                {
                     Console.WriteLine(item);
-                }
-                Console.WriteLine("Original array:");
+                Console.WriteLine("Начальный массив: ");
 
-                foreach(var item in array)
-                {
-                    Console.WriteLine(item);
-                }
-                Console.WriteLine("Work is finished.");
+                foreach(var item in array)              
+                    Console.WriteLine(item);             
+                Console.WriteLine("Работа завершена.");
             }
             else
-            {
-                Console.WriteLine("Your input is invalid, try again later.");
-            }
+                Console.WriteLine("Некорректный ввод.");
         }
 
-        private static bool IsStringCorrect(string input)
+        private static bool IsStringValid(string input)
         {
             for(int i = 0; i < input.Length; i++)
             {
-                if (!Char.IsDigit(input[i]) && input[i] != ' ' && input[i] != ',' && input[i] != '-')
-                {
-                    return false;
-                }
+                if (!Char.IsDigit(input[i]) && input[i] != ' ' && input[i] != ',' && input[i] != '-')              
+                    return false;                
             }
 
             return true;
         }
 
-        private static double[] ParseToArray(string input)
+        private static double[] ToArray(string input)
         {
-            string[] strings = input.Split(" ");
-            double[] parsedArray = new double[strings.Length];
-
-            for (int i = 0; i < strings.Length; i++)
-            {
-                parsedArray[i] = double.Parse(strings[i]); 
-            }
-        
-            return parsedArray;
+            string[] elements = input.Split(" ");
+            double[] parsed = new double[elements.Length];
+            for (int i = 0; i < elements.Length; i++)
+                parsed[i] = double.Parse(elements[i]);   
+            return parsed;
         }
 
-        private static double[] GetChangedArray(double[] array)
+        private static double[] ChangeArray(double[] array)
         {
-            double[] changedArray = new double[array.Length];
-
+            double[] newArray = new double[array.Length];
             for(int i = 0; i < array.Length; i++)
             {
-                if (IsNumberInteger(array[i]) && IsNumberPositive(array[i])) changedArray[i] = GetFactorial(array[i]);
-                else if (IsNumberInteger(array[i]) && !IsNumberPositive(array[i])) changedArray[i] = array[i];
-                else changedArray[i] = GetRoundedPartOfDouble(array[i]);
+                if (IsInteger(array[i]) && IsPositive(array[i]))
+                    newArray[i] = Factorial(array[i]);
+                else if (IsInteger(array[i]) && !IsPositive(array[i]))
+                    newArray[i] = array[i];
+                else 
+                    newArray[i] = RoundedPart(array[i]);
             }
-
-            return changedArray;
+            return newArray;
         }
 
-        private static double GetFactorial(double n)
+        private static double Factorial(double n)
         {
-            if (n == 1) return 1;
-
-            return n * GetFactorial(n - 1);
+            if (n == 1)
+                return 1;
+            return n * Factorial(n - 1);
         }
 
-        private static double GetRoundedPartOfDouble(double number)
+        private static double RoundedPart(double number)
         {
             number = Math.Round(number, 2);
-
             string[] parts = (number.ToString()).Split(',');
-
             return double.Parse(parts[1]);
         }
 
-        private static bool IsNumberInteger(double number)
+        private static bool IsInteger(double number)
         {
             return number == (int)number;
         }
 
-        private static bool IsNumberPositive(double number)
+        private static bool IsPositive(double number)
         {
             return number > 0;
         }
